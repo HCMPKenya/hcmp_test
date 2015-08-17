@@ -151,9 +151,8 @@ public function send_stock_decommission_email($message,$subject,$attach_file){
     //    $email_address .= $this->get_county_email($data[0]['district']);
 
        $email_address = 'karsanrichard@gmail.com';
-       $bcc_email ='karsanrichard@gmail.com';
-       /*
-	   $bcc_email ='kelvinmwas@gmail.com,smutheu@clintonhealthaccess.org,collinsojenge@gmail.com,tngugi@clintonhealthaccess.org,
+      /* 
+	   $bcc_email ='karsanrichard@gmail.com,smutheu@clintonhealthaccess.org,collinsojenge@gmail.com,tngugi@clintonhealthaccess.org,
 		bwariari@clintonhealthaccess.org,
 		amwaura@clintonhealthaccess.org,
 		eongute@clintonhealthaccess.org,
@@ -167,10 +166,12 @@ public function send_order_submission_email($message,$subject,$attach_file){
 
 	   $facility_code=$this -> session -> userdata('facility_id');
 	   $data=Users::getUsers($facility_code)->toArray();
-	   $email_address='karsanrichard@gmail.com';
+	   $email_address = $this -> get_facility_email($facility_code);
+	   $email_address .= $this -> get_ddp_email($data[0]['district']);
+	   // $email_address='karsanrichard@gmail.com';
 	   //$bcc_email ='kelvinmwas@gmail.com';
-	  // $cc_email=$this->get_ddp_email($data[0]['district']);	   
-	 //  $this->get_county_email($data[0]['district']) ;
+	  $cc_email=$this->get_ddp_email($data[0]['district']);	   
+	  // $this->get_county_email($data[0]['district']) ;
 	   
 	  return $this->send_email($email_address,$message, $subject,$attach_file);
 	
@@ -178,13 +179,11 @@ public function send_order_submission_email($message,$subject,$attach_file){
 public function send_order_approval_email($message,$subject,$attach_file,$facility_code,$reject_order=null,$source = null){
 	  
  $email="karsanrichard@gmail.com";
- $cc_email="karsanrichard@gmail.com";
+ $cc_email="";
 
 /*
- $bcc_email ='kelvinmwas@gmail.com,
- 		karsanrichard@gmail.com,
+ $bcc_email ='karsanrichard@gmail.com,
  		smutheu@clintonhealthaccess.org,
- 		collinsojenge@gmail.com,
  		tngugi@clintonhealthaccess.org,
 		bwariari@clintonhealthaccess.org,
 		amwaura@clintonhealthaccess.org,
@@ -192,7 +191,7 @@ public function send_order_approval_email($message,$subject,$attach_file,$facili
 		rkihoto@clintonhealthaccess.org';
 */
 
- $bcc_email ='karsanrichard@gmail.com';
+ // $bcc_email ='karsanrichard@gmail.com';
 
  $data=facilities::get_facility_name_($facility_code)->toArray();
  $data=$data[0];
@@ -200,7 +199,9 @@ public function send_order_approval_email($message,$subject,$attach_file,$facili
   if($reject_order=="Rejected" || $reject_order=="Updated"):
 	  // $email_address=$this->get_facility_email($facility_code);
 	  // $cc_email .=$this->get_ddp_email($data['district']);	  
+	  $email_address='karsanrichard@gmail.com'; 
 	  else:		  
+	  $email_address='karsanrichard@gmail.com'; 
 
 	  	/*
 		   $email_address='shamim.kuppuswamy@kemsa.co.ke,
@@ -208,11 +209,11 @@ public function send_order_approval_email($message,$subject,$attach_file,$facili
 				imugada@kemsa.co.ke,
 				laban.okune@kemsa.co.ke,
 				samuel.wataku@kemsa.co.ke,'; 
-				*/
-	  $email_address='karsanrichard@gmail.com'; 
-	  // $cc_email .=$this->get_ddp_email($data['district']);
-	  // $cc_email .=$this->get_facility_email($facility_code);
-	  // $cc_email .=$this->get_county_email($data['district']) ;
+		*/
+
+	  $cc_email .=$this->get_ddp_email($data['district']);
+	  $cc_email .=$this->get_facility_email($facility_code);
+	  $cc_email .=$this->get_county_email($data['district']) ;
 
 
   endif;
@@ -224,12 +225,12 @@ public function send_order_delivery_email($message,$subject,$attach_file=null){
 
        $cc_email='';
       // echo 'test'; exit;
-	   // $bcc_email ='kelvinmwas@gmail.com,smutheu@clintonhealthaccess.org,collinsojenge@gmail.com,tngugi@clintonhealthaccess.org,karsanrichard@gmail.com';
-	   $bcc_email = 'karsanrichard@gmail.com';
+	   $bcc_email ='karsanrichard@gmail.com,smutheu@clintonhealthaccess.org,tngugi@clintonhealthaccess.org';
+	   // $bcc_email = 'karsanrichard@gmail.com';
 	   $facility_code=$this -> session -> userdata('facility_id');  
 	   $data=Users::getUsers($facility_code)->toArray();	   
-	   // $cc_email .=$this->get_facility_email($facility_code);
-	   // $cc_email .=$this->get_county_email($data[0]['district']) ;
+	   $cc_email .=$this->get_facility_email($facility_code);
+	   $cc_email .=$this->get_county_email($data[0]['district']) ;
 		
 		
 	return $this->send_email(substr($this->get_ddp_email($data[0]['district']),0,-1),$message,$subject,null,$bcc_email,substr($cc_email,0,-1));
