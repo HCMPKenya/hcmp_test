@@ -955,8 +955,14 @@ endif;
 				$data['listing']= Users::get_user_list_district($district);
 				if($facility_code==0){
 					$data['facilities']=Facilities::getFacilities($district);
+					$facility_name = null;
+					$facility_banner_text = null;
+					$no_of_facilities = 0;
 				}else{
-					$data['facilities']=Facilities::getFacilities_from_code($facility_code);
+					$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
+					$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
+					$facility_name = $data['facilities'][0]['facility_name'];						
+					$no_of_facilities = 1;					
 				}
 				
 				$data['counts']=Users::get_users_district($district);
@@ -989,6 +995,22 @@ endif;
 			break;	
 			case 'county':
 				$permissions='county_permissions';
+				if($facility_code==0){
+					$data['facilities']=Facilities::getFacilities($district);
+					$facility_name = null;
+					$facility_banner_text = null;
+					$district_name = null;										
+					$district_id = null;										
+					$no_of_facilities = 0;
+				}else{
+					$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
+					$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
+					$facility_name = $data['facilities'][0]['facility_name'];					
+					$district_id = $data['facilities'][0]['district'];								
+					$district_data = Districts::get_district_name($district_id);		
+					$district_name = $district_data[0]['district'];					
+					$no_of_facilities = 1;					
+				}
 				$data['listing']= Users::get_user_list_county($county);	
 				$data['district_data'] = districts::getDistrict($county);
 				$data['counts']=Users::get_users_county($county);
@@ -997,10 +1019,16 @@ endif;
 			break;	
         endswitch;
 
-        $data['title'] = "User Management";
+        $data['title'] = "Add Multiple Users";
 		$data['user_types']=Access_level::get_access_levels($permissions);	
-		$data['banner_text'] = "User Management";
-		$data['content_view'] = "shared_files/add_users_multiple";
+		$data['banner_text'] = "Addition of users".$facility_banner_text;
+		$data['facility_name'] = $facility_name;
+		$data['facility_code'] = $facility_code;
+		$data['facility_banner_text'] = $facility_banner_text;
+		$data['district_name'] = $district_name;
+		$data['district_id'] = $district_id;
+		$data['no_of_facilities'] = $no_of_facilities;
+		$data['content_view'] = "shared_files/add_users_multiple";		
 		$this -> load -> view($template, $data);
 		}
 
@@ -1164,7 +1192,7 @@ endif;
 
 		public function users_create_multiple(){
 
-			// echo "<pre>";print_r($this->input->post());echo "</pre>";
+			// echo "<pre>";prisnt_r($this->input->post());echo "</pre>";
 			$count = count($this->input->post('username'));
 			for ($i=0; $i < $count; $i++) { 
 				$fname = $this->input->post('first_name')[$i];
@@ -1180,7 +1208,7 @@ endif;
 				echo $result;
 			}
 			// echo "I HAVE ENDED HEEEERE";
-			redirect('user/user_create');
+			redirect('facility_activation/facility_dash');
 		}
 
 		public function tester(){
