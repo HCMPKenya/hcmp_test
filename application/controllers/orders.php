@@ -800,7 +800,7 @@ class orders extends MY_Controller {
  			// echo $filename;exit;
     return $meds_total;
  		}//end of if
- 		
+
  	}
 
 
@@ -870,7 +870,8 @@ class orders extends MY_Controller {
 
 				}
 
-				$orders = Doctrine_Manager::getInstance() -> getCurrentConnection() -> execute("INSERT INTO facility_order_details ( `id`,
+				$orders = Doctrine_Manager::getInstance() -> getCurrentConnection() -> execute("INSERT INTO facility_order_details ( 
+					`id`,
 					`order_number_id`,
 					`commodity_id`,
 					`$column_packs`,

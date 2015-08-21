@@ -228,5 +228,13 @@ $query_results = Doctrine_Manager::getInstance()->getCurrentConnection()
 			
 	return $inserttransaction ;
  }*/
+
+ public static function get_order_cost($order_no){
+ 	$inserttransaction = Doctrine_Manager::getInstance()->getCurrentConnection()
+		->fetchAll("SELECT order_total FROM hcmp_rtk.facility_orders WHERE id = $order_no;");	
+			
+	return $inserttransaction ;	
+ }
+
 }
 	
