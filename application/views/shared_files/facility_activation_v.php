@@ -711,16 +711,23 @@ $("#create_new").click(function() {
 		  	$('#confirmDeActivateModal').modal('hide');
 		  	 return false;
 		});
+		
 		$('#btnYesActivate').click(function() {
 		    // handle deletion here
 		  	var facility_code = $('#confirmActivateModal').data('id');
-		  	change_status_new(facility_code,0);
+		  	change_status_new(facility_code,0,1);
+		  	$('#confirmActivateModal').modal('hide');
+		});
+		$('#btnYesActivateNoUsers').click(function() {
+		    // handle deletion here
+		  	var facility_code = $('#confirmActivateModal').data('id');
+		  	change_status_new(facility_code,0,0);
 		  	$('#confirmActivateModal').modal('hide');
 		});
 		$('#btnYesDeactivate').click(function() {
 		    // handle deletion here
 		  	var facility_code = $('#confirmDeActivateModal').data('id');
-		  	change_status_new(facility_code,1);
+		  	change_status_new(facility_code,1,0);
 		  	$('#confirmDeActivateModal').modal('hide');
 		});
   //  		$('.deactivate').on('click', function(e) {
@@ -841,7 +848,7 @@ $("#create_new").click(function() {
 		// 	}
 		// });
 
-		function change_status_new(facility_code,stati){//seth
+		function change_status_new(facility_code,stati,add_users){//seth
       // alert(checked);return;
 	      message = "";
 	     
@@ -877,8 +884,11 @@ $("#create_new").click(function() {
 	        	$('#btn_'+facility_code).addClass('btn-danger');
 	        	$('#btn_'+facility_code).removeClass('activate');
 	        	$('#btn_'+facility_code).addClass('deactivate');
-	        	var base_url = "<?php echo base_url().'user/user_create_multiple/' ?>";
-       			window.location.href = base_url+facility_code;	        	
+	        	if(add_users==1){
+	        		var base_url = "<?php echo base_url().'user/user_create_multiple/' ?>";
+       				window.location.href = base_url+facility_code;	      
+	        	}
+	        	  	
               }else{
               	message_after = "Facility: "+ facility_code +" has been Deactivated";
 	        	$('#chkbx_'+facility_code).removeAttr('checked');	        	
@@ -918,13 +928,13 @@ $("#create_new").click(function() {
 		$('#btnYesActivate').click(function() {
 		    // handle deletion here
 		  	var facility_code = $('#confirmActivateModal').data('id');
-		  	change_status_new(facility_code,0);
+		  	change_status_new(facility_code,0,0);
 		  	$('#confirmActivateModal').modal('hide');
 		});
 		$('#btnYesDeactivate').click(function() {
 		    // handle deletion here
 		  	var facility_code = $('#confirmDeActivateModal').data('id');
-		  	change_status_new(facility_code,1);
+		  	change_status_new(facility_code,1,0);
 		  	$('#confirmDeActivateModal').modal('hide');
 		});
    		$('.deactivate').on('click', function(e) {
@@ -1043,12 +1053,13 @@ $("#create_new").click(function() {
         <h4 class="modal-title">Confirm Activation</h4>
       </div>
       <div class="modal-body" style="font-size:13px;text-align:centre">
-        <p>The Facility will now be active and users will be able to submit data. <p/>
+        <p>This facility will now be active and users will be able to submit data. <p/>
         <p>Proceed to addition of users?</p>
       </div>
       <div class="modal-footer">
-        <button type="button"  id="btnNoActivate" class="btn btn-default" data-dismiss="modal">No</button>
-        <button type="button" id="btnYesActivate" class="btn btn-primary" id="btn-ok">Yes</button>
+        <button type="button"  id="btnYesActivateNoUsers" class="btn btn-success" data-dismiss="modal">Activate without Users</button>
+        <button type="button"  id="btnNoActivate" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" id="btnYesActivate" class="btn btn-primary" id="btn-ok">Activate adding Users</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -1059,12 +1070,12 @@ $("#create_new").click(function() {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Confirm Deactivation?</h4>
+        <h4 class="modal-title">Confirm Deactivation</h4>
       </div>
       <div class="modal-body" style="font-size:14px;text-align:centre">
       <center>
       	<!-- <center><img src="<?php echo base_url().'assets/img/Alert_resized.png'?>" style="height:150px;width:150px;"></center><br/> -->
-        <p>The Folowing Users are currently active Under this facility. Deactivation of the facility will render them unable to use the system.</p>
+        <p>The following users are currently active under this facility. Deactivation of the facility will render them unable to use the system.</p>
         <table  id="confirm_deactivate_table" class="display table table-bordered confirm_deactivate_table" cellspacing="0" width="100%">
         	<thead>
         		<tr><th>User Details</th><th>Date Activated</th><th>Date Last Logged In</th></tr>
