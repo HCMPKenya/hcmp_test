@@ -7,8 +7,8 @@
 define('DB_HOST', 'localhost');
 define('DB_PORT', 3306);
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_NAME', 'hcmp_rtk');
+define('DB_PASSWORD', 'hPlaB');
+define('DB_NAME', 'hcmp_test');
 
 /**
  * Authentication data for access to DBV itself
